@@ -40,12 +40,11 @@ enum unicorne_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_split_3x6_3(
-	KC_TAB,   KC_Q,   KC_W,   KC_E,    KC_R,   KC_T,    KC_Y,  KC_U,   KC_I,    KC_O,   KC_P,      KC_BSPC,
-	HOME_ESC, HOME_A, HOME_S, HOME_D,  HOME_F, KC_G,    KC_H,  HOME_J, HOME_K,  HOME_L, HOME_SCLN, KC_QUOT,
-	KC_LSFT,  KC_Z,   KC_X,   KC_C,    KC_V,   KC_B,    KC_N,  KC_M,   KC_COMM, KC_DOT, KC_SLSH,   RSFT_T(KC_ENT),
-	                          KC_LGUI, LOWER,  UTIL,    VIMUX, RAISE,  KC_RALT
+	KC_TAB,   KC_Q,   KC_W,   KC_E,    KC_R,   KC_T,      KC_Y,  KC_U,   KC_I,    KC_O,   KC_P,      KC_BSPC,
+	HOME_ESC, HOME_A, HOME_S, HOME_D,  HOME_F, KC_G,      KC_H,  HOME_J, HOME_K,  HOME_L, HOME_SCLN, KC_QUOT,
+	KC_LSFT,  KC_Z,   KC_X,   KC_C,    KC_V,   KC_B,      KC_N,  KC_M,   KC_COMM, KC_DOT, KC_SLSH,   RSFT_T(KC_ENT),
+	                          LOWER,   UTIL,   KC_TAB,    KC_ENT, VIMUX, RAISE
 ),
-
 
 [_LOWER] = LAYOUT_split_3x6_3(
 	KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,   KC_PERC,    KC_CIRC, KC_AMPR,    KC_ASTR,    KC_LPRN, KC_RPRN, KC_BSPC,
@@ -79,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______,   MEH(KC_LEFT),  MEH(KC_DOWN),  MEH(KC_UP),  MEH(KC_RIGHT),  _______, _______,
     _______, _______, _______, _______, _______, _______,   KC_LEFT,       KC_DOWN,       KC_UP,       KC_RIGHT,       _______, _______,
     _______, _______, _______, _______, _______, _______,   HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_UP), HYPR(KC_RIGHT), _______, _______,
-	                           _______, _______, _______,   _______, KC_MEH, KC_HYPR
+	                           _______, _______, _______,   KC_BSPC, KC_MEH, KC_HYPR
 )
 
 };
