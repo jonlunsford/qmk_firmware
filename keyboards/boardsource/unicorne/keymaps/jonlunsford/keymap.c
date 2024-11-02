@@ -1,6 +1,10 @@
 #include QMK_KEYBOARD_H
 
-enum unicorne_layers { _QWERTY, _VIMUX, _LOWER, _RAISE, _ADJUST };
+#ifdef OLED_ENABLE
+#include "music-bars.c"
+#endif
+
+enum unicorne_layers { _QWERTY, _VIMUX, _UTIL, _LOWER, _RAISE, _ADJUST };
 
 enum unicorne_keycodes {
     QWERTY = SAFE_RANGE,
@@ -18,44 +22,66 @@ enum unicorne_keycodes {
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
+#define UTIL MO(_UTIL)
 /* _VIMUX layer when held, space when tapped */
 #define VIMUX LT(_VIMUX, KC_SPC)
+/* Homerow mods left */
+#define HOME_ESC LCTL_T(KC_ESC)
+#define HOME_A LCTL_T(KC_A)
+#define HOME_S LALT_T(KC_S)
+#define HOME_D LGUI_T(KC_D)
+#define HOME_F LSFT_T(KC_F)
+/* Homerow mods right */
+#define HOME_J RSFT_T(KC_J)
+#define HOME_K RGUI_T(KC_K)
+#define HOME_L RALT_T(KC_L)
+#define HOME_SCLN RCTL_T(KC_SCLN)
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_split_3x6_3(
-	KC_TAB,         KC_Q, KC_W, KC_E,    KC_R,  KC_T,    KC_Y,   KC_U,  KC_I,    KC_O,   KC_P,    KC_BSPC,
-	LCTL_T(KC_ESC), KC_A, KC_S, KC_D,    KC_F,  KC_G,    KC_H,   KC_J,  KC_K,    KC_L,   KC_SCLN, KC_QUOT,
-	KC_LSFT,        KC_Z, KC_X, KC_C,    KC_V,  KC_B,    KC_N,   KC_M,  KC_COMM, KC_DOT, KC_SLSH, RSFT_T(KC_ENT),
-	                            KC_LGUI, LOWER, KC_SPC,  VIMUX,  RAISE, KC_RALT
+	KC_TAB,   KC_Q,   KC_W,   KC_E,    KC_R,   KC_T,    KC_Y,  KC_U,   KC_I,    KC_O,   KC_P,      KC_BSPC,
+	HOME_ESC, HOME_A, HOME_S, HOME_D,  HOME_F, KC_G,    KC_H,  HOME_J, HOME_K,  HOME_L, HOME_SCLN, KC_QUOT,
+	KC_LSFT,  KC_Z,   KC_X,   KC_C,    KC_V,   KC_B,    KC_N,  KC_M,   KC_COMM, KC_DOT, KC_SLSH,   RSFT_T(KC_ENT),
+	                          KC_LGUI, LOWER,  UTIL,    VIMUX, RAISE,  KC_RALT
 ),
 
+
 [_LOWER] = LAYOUT_split_3x6_3(
-	KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,   KC_PERC, KC_CIRC, KC_AMPR,    KC_ASTR,    KC_LPRN, KC_RPRN, KC_BSPC,
-	KC_DEL,  KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT, KC_F5,   KC_F6,   KC_UNDS,    KC_PLUS,    KC_LCBR, KC_RCBR, KC_PIPE,
-	_______, KC_F7,   KC_F8,   KC_F9,   KC_F10,   KC_F11,  KC_F12,  S(KC_NUHS), S(KC_NUBS), KC_VOLD, KC_VOLU, KC_MPLY,
-	                            _______, _______, _______,  _______, _______, _______
+	KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,   KC_PERC,    KC_CIRC, KC_AMPR,    KC_ASTR,    KC_LPRN, KC_RPRN, KC_BSPC,
+	KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,    KC_F5,      KC_F6,   KC_UNDS,    KC_PLUS,    KC_LCBR, KC_RCBR, KC_PIPE,
+	_______, KC_F7,   KC_F8,   KC_F9,   KC_F10,   KC_F11,     KC_F12,  S(KC_NUHS), S(KC_NUBS), KC_VOLD, KC_VOLU, KC_MPLY,
+	                           _______, _______,  _______,    _______, _______, _______
 ),
 
 [_RAISE] = LAYOUT_split_3x6_3(
-	KC_GRV,  KC_1,    KC_2,    KC_3,  KC_4,     KC_5,   KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
-	KC_DEL,  KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, KC_F5,  KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
-	_______, KC_F7,   KC_F8,   KC_F9, KC_F10,   KC_F11, KC_F12,  KC_NUHS, KC_NUBS, KC_VOLD, KC_VOLU, KC_MPLY,
-	                    _______, _______, _______,  _______, _______, _______
+	KC_GRV,  KC_1,    KC_2,    KC_3,  KC_4,   KC_5,      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
+	KC_DEL,  KC_F1,   KC_F2,   KC_F3, KC_F4,  KC_F5,     KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
+	_______, KC_F7,   KC_F8,   KC_F9, KC_F10, KC_F11,    KC_F12,  KC_NUHS, KC_NUBS, KC_VOLD, KC_VOLU, KC_MPLY,
+	                        _______, _______, _______,   _______, _______, _______
 ),
 
 [_ADJUST] = LAYOUT_split_3x6_3(
-	QK_BOOT, _______, _______, _______, _______, _______, RGB_VAI, RGB_HUI, RGB_SAI, RGB_MOD, RGB_TOG, _______,
-	EE_CLR,  _______, _______, _______, _______, _______, RGB_VAD, RGB_HUD, RGB_SAD, RGB_RMOD, CK_TOGG, _______,
-	_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-	                    _______, _______, _______, _______, _______, _______
+	QK_BOOT, _______, _______, _______, _______, _______,    RGB_VAI, RGB_HUI, RGB_SAI, RGB_MOD,  RGB_TOG, _______,
+	EE_CLR,  _______, _______, _______, _______, _______,    RGB_VAD, RGB_HUD, RGB_SAD, RGB_RMOD, CK_TOGG, _______,
+	_______, _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______,  _______,
+	                           _______, _______, _______,    _______, _______, _______
 ),
 
 [_VIMUX] = LAYOUT_split_3x6_3(
-    KC_TRNS, V_Q, V_W,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-    KC_TRNS, T_P, KC_TRNS, V_BD,    KC_TRNS, KC_TRNS, KC_TRNS, T_SH,    KC_TRNS, V_PU,    V_PD,    T_SV,
-    KC_TRNS, T_Z, T_C,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-	                    _______, _______, _______, _______, _______, _______
+    KC_TRNS, V_Q, V_W,     KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, T_P, KC_TRNS, V_BD,    KC_TRNS, KC_TRNS,    KC_TRNS, T_SH,    KC_TRNS, V_PU,    V_PD,    T_SV,
+    KC_TRNS, T_Z, T_C,     KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+	                       _______, _______, _______,    _______, _______, _______
+),
+
+[_UTIL] = LAYOUT_split_3x6_3(
+    _______, _______, _______, _______, _______, _______,   MEH(KC_LEFT),  MEH(KC_DOWN),  MEH(KC_UP),  MEH(KC_RIGHT),  _______, _______,
+    _______, _______, _______, _______, _______, _______,   KC_LEFT,       KC_DOWN,       KC_UP,       KC_RIGHT,       _______, _______,
+    _______, _______, _______, _______, _______, _______,   HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_UP), HYPR(KC_RIGHT), _______, _______,
+	                           _______, _______, _______,   _______, KC_MEH, KC_HYPR
 )
+
 };
 
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -184,3 +210,40 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
+
+#ifdef OLED_ENABLE
+bool oled_task_user(void) {
+    // Host Keyboard Layer Status
+    oled_write_P(PSTR("Layer: "), false);
+
+    switch (get_highest_layer(layer_state)) {
+        case _QWERTY:
+            oled_write_P(PSTR("QWERTY\n"), false);
+            break;
+        case _RAISE:
+            oled_write_P(PSTR("RAISE\n"), false);
+            break;
+        case _LOWER:
+            oled_write_P(PSTR("LOWER\n"), false);
+            break;
+        case _VIMUX:
+            oled_write_P(PSTR("VIMUX\n"), false);
+            break;
+        case _ADJUST:
+            oled_write_P(PSTR("ADJUST\n"), false);
+            break;
+        case _UTIL:
+            oled_write_P(PSTR("UTIL\n"), false);
+            break;
+        default:
+            // Or use the write_ln shortcut over adding '\n' to the end of your string
+            oled_write_ln_P(PSTR("Undefined"), false);
+    }
+
+    if (!is_keyboard_master()) {
+        oled_render_anim();
+    }
+
+    return false;
+}
+#endif

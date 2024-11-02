@@ -1,3 +1,5 @@
 SERIAL_DRIVER = vendor
 TRI_LAYER_ENABLE = yes
-EXTRAKEY_ENABLED = yes
+WPM_ENABLE = yes
+LTO_ENABLE = yes
+
