@@ -211,7 +211,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 #ifdef OLED_ENABLE
-bool oled_task_user(void) {
+static void render_layer_state(void) {
     // Host Keyboard Layer Status
     oled_write_P(PSTR("Layer: "), false);
 
@@ -238,8 +238,12 @@ bool oled_task_user(void) {
             // Or use the write_ln shortcut over adding '\n' to the end of your string
             oled_write_ln_P(PSTR("Undefined"), false);
     }
+}
 
-    if (!is_keyboard_master()) {
+bool oled_task_user(void) {
+    if (is_keyboard_master()) {
+        render_layer_state();
+    } else {
         oled_render_anim();
     }
 
